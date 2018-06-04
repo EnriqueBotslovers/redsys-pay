@@ -36,16 +36,15 @@ exports.makePaymentParameters = (paramsInput) => {
   const paramsObj = {
     DS_MERCHANT_AMOUNT: String(paramsInput.amount),
     DS_MERCHANT_ORDER: paramsInput.orderReference,
-    DS_MERCHANT_MERCHANTNAME: paramsInput.merchantName,
     DS_MERCHANT_MERCHANTCODE: paramsInput.merchantCode,
     DS_MERCHANT_CURRENCY: paramsInput.currency,
     DS_MERCHANT_TRANSACTIONTYPE: paramsInput.transactionType,
-    DS_MERCHANT_TERMINAL: paramsInput.terminal,
-    DS_MERCHANT_MERCHANTURL: paramsInput.merchantURL || '',
-    DS_MERCHANT_URLOK: paramsInput.successURL || '',
-    DS_MERCHANT_URLKO: paramsInput.errorURL || ''
+    DS_MERCHANT_TERMINAL: paramsInput.terminal
   }
-
+  if (paramsInput.merchantName) paramsObj.DS_MERCHANT_MERCHANTNAME = paramsInput.merchantName
+  if (paramsInput.merchantURL) paramsObj.DS_MERCHANT_MERCHANTURL = paramsInput.merchantURL
+  if (paramsInput.errorURL) paramsObj.DS_MERCHANT_URLKO = paramsInput.errorURL
+  if (paramsInput.successURL) paramsObj.DS_MERCHANT_URLOK = paramsInput.successURL
   if (paramsInput.DateFrecuency) paramsObj.DS_MERCHANT_DATEFRECUENCY = paramsInput.DateFrecuency
   if (paramsInput.ChargeExpiryDate) paramsObj.DS_MERCHANT_CHARGEEXPIRYDATE = paramsInput.ChargeExpiryDate
   if (paramsInput.SumTotal) paramsObj.DS_MERCHANT_SUMTOTAL = paramsInput.SumTotal
