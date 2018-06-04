@@ -42,7 +42,7 @@ exports.initialize = function (merchantSecretKey) {
   config.initialized = true
 }
 
-exports.makePaymentParameters = function ({ amount, orderReference, merchantName, merchantCode, currency, transactionType, DateFrecuency, ChargeExpiryDate, SumTotal, terminal = "1", merchantURL, successURL, errorURL }) {
+exports.makePaymentParameters = function ({ amount, orderReference, merchantName, merchantCode, currency, transactionType, DateFrecuency, ChargeExpiryDate, DirectPayment, SumTotal, terminal = "1", merchantURL, successURL, errorURL }) {
   if (!amount) throw new Error("The amount to charge is mandatory")
   if (!merchantCode) throw new Error("The merchant code is mandatory")
   if (!transactionType) throw new Error("The transcation type is mandatory")
@@ -71,6 +71,7 @@ exports.makePaymentParameters = function ({ amount, orderReference, merchantName
   if (DateFrecuency) paramsObj.DS_MERCHANT_DATEFRECUENCY = DateFrecuency
   if (ChargeExpiryDate) paramsObj.DS_MERCHANT_CHARGEEXPIRYDATE = ChargeExpiryDate
   if (SumTotal) paramsObj.DS_MERCHANT_SUMTOTAL = SumTotal
+  if (DirectPayment) paramsObj.DS_MERCHANT_DIRECTPAYMENT = DirectPayment
 
   const payload = JSON.stringify(paramsObj)
   const payloadBuffer = new Buffer(payload)
