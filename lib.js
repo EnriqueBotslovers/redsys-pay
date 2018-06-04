@@ -1,4 +1,5 @@
 const crypto = require('crypto')
+const Buffer = require('buffer').Buffer
 
 const zeroPad = (buf, blocksize) => {
   if (typeof buf === 'string') {
