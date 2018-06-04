@@ -20,59 +20,42 @@ exports.initialize = (merchantSecretKey) => {
   config.initialized = true
 }
 
-exports.makePaymentParameters = ({
-  amount,
-  orderReference,
-  merchantName,
-  merchantCode,
-  currency,
-  transactionType,
-  DateFrecuency,
-  ChargeExpiryDate,
-  DirectPayment,
-  Identifier,
-  SumTotal,
-  terminal,
-  merchantURL,
-  successURL,
-  errorURL
-}) => {
-  if (!amount) throw new Error("The amount to charge is mandatory")
-  if (!merchantCode) throw new Error("The merchant code is mandatory")
-  if (!transactionType) throw new Error("The transcation type is mandatory")
-  if (!successURL) throw new Error("The successURL is mandatory")
-  if (!errorURL) throw new Error("The errorURL is mandatory")
-  if (!terminal) terminal = 1
-  if (!currency) currency = CURRENCIES.EUR
-  if (!orderReference) {
-    orderReference = Date.now()
-    console.log("Warning: no orderReference provided. Using", orderReference)
+exports.makePaymentParameters = (paramsInput) => {
+  if (!paramsInput.amount) throw new Error("The amount to charge is mandatory")
+  if (!paramsInput.merchantCode) throw new Error("The merchant code is mandatory")
+  if (!paramsInput.transactionType) throw new Error("The transcation type is mandatory")
+  if (!paramsInput.successURL) throw new Error("The successURL is mandatory")
+  if (!paramsInput.errorURL) throw new Error("The errorURL is mandatory")
+  if (!paramsInput.terminal) paramsInput.terminal = 1
+  if (!paramsInput.currency) paramsInput.currency = CURRENCIES.EUR
+  if (!paramsInput.orderReference) {
+    paramsInput.orderReference = Date.now()
+    console.log("Warning: no orderReference provided. Using", paramsInput.orderReference)
   }
 
   const paramsObj = {
-    DS_MERCHANT_AMOUNT: String(amount),
-    DS_MERCHANT_ORDER: orderReference,
-    DS_MERCHANT_MERCHANTNAME: merchantName,
-    DS_MERCHANT_MERCHANTCODE: merchantCode,
-    DS_MERCHANT_CURRENCY: currency,
-    DS_MERCHANT_TRANSACTIONTYPE: transactionType,
-    DS_MERCHANT_TERMINAL: terminal,
-    DS_MERCHANT_MERCHANTURL: merchantURL || '',
-    DS_MERCHANT_URLOK: successURL || '',
-    DS_MERCHANT_URLKO: errorURL || ''
+    DS_MERCHANT_AMOUNT: String(paramsInput.amount),
+    DS_MERCHANT_ORDER: paramsInput.orderReference,
+    DS_MERCHANT_MERCHANTNAME: paramsInput.merchantName,
+    DS_MERCHANT_MERCHANTCODE: paramsInput.merchantCode,
+    DS_MERCHANT_CURRENCY: paramsInput.currency,
+    DS_MERCHANT_TRANSACTIONTYPE: paramsInput.transactionType,
+    DS_MERCHANT_TERMINAL: paramsInput.terminal,
+    DS_MERCHANT_MERCHANTURL: paramsInput.merchantURL || '',
+    DS_MERCHANT_URLOK: paramsInput.successURL || '',
+    DS_MERCHANT_URLKO: paramsInput.errorURL || ''
   }
 
-  if (DateFrecuency) paramsObj.DS_MERCHANT_DATEFRECUENCY = DateFrecuency
-  if (ChargeExpiryDate) paramsObj.DS_MERCHANT_CHARGEEXPIRYDATE = ChargeExpiryDate
-  if (SumTotal) paramsObj.DS_MERCHANT_SUMTOTAL = SumTotal
-  if (DirectPayment) paramsObj.DS_MERCHANT_DIRECTPAYMENT = DirectPayment
-  if (Identifier) paramsObj.DS_MERCHANT_IDENTIFIER = Identifier
-  console.log(JSON.stringify(paramsObj))
+  if (paramsInput.DateFrecuency) paramsObj.DS_MERCHANT_DATEFRECUENCY = paramsInput.DateFrecuency
+  if (paramsInput.ChargeExpiryDate) paramsObj.DS_MERCHANT_CHARGEEXPIRYDATE = paramsInput.ChargeExpiryDate
+  if (paramsInput.SumTotal) paramsObj.DS_MERCHANT_SUMTOTAL = paramsInput.SumTotal
+  if (paramsInput.DirectPayment) paramsObj.DS_MERCHANT_DIRECTPAYMENT = paramsInput.DirectPayment
+  if (paramsInput.Identifier) paramsObj.DS_MERCHANT_IDENTIFIER = paramsInput.Identifier
 
   const payload = JSON.stringify(paramsObj)
   const payloadBuffer = Buffer.from(payload)
   const Ds_MerchantParameters = payloadBuffer.toString('base64')
-  const Ds_Signature = sha256Sign(config.MERCHANT_SECRET_KEY, orderReference, Ds_MerchantParameters)
+  const Ds_Signature = sha256Sign(config.MERCHANT_SECRET_KEY, paramsInput.orderReference, Ds_MerchantParameters)
 
   return {
     Ds_SignatureVersion: "HMAC_SHA256_V1",
