@@ -1,6 +1,6 @@
 const crypto = require('crypto')
 
-function zeroPad(buf, blocksize) {
+const zeroPad = (buf, blocksize) => {
   if (typeof buf === 'string') {
     buf = Buffer.from(buf, 'utf8')
   }
@@ -9,7 +9,7 @@ function zeroPad(buf, blocksize) {
   return Buffer.concat([buf, pad])
 }
 
-function encryptOrder (merchantKey, orderRef) {
+const encryptOrder = (merchantKey, orderRef) => {
   const secretKey = Buffer.from(merchantKey, 'base64')
   const iv = Buffer.alloc(8)
   iv.fill(0)
