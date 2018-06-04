@@ -1,3 +1,41 @@
+const crypto = require('crypto')
+
+function zeroPad(buf, blocksize) {
+  if (typeof buf === 'string') {
+    buf = Buffer.from(buf, 'utf8')
+  }
+  var pad = Buffer.alloc((blocksize - (buf.length % blocksize)) % blocksize)
+  pad.fill(0)
+  return Buffer.concat([buf, pad])
+}
+
+function encryptOrder (merchantKey, orderRef) {
+  const secretKey = Buffer.from(merchantKey, 'base64')
+  const iv = Buffer.alloc(8)
+  iv.fill(0)
+  const cipher = crypto.createCipheriv('des-ede3-cbc', secretKey, iv)
+  cipher.setAutoPadding(false)
+  const zerores = zeroPad(orderRef, 8)
+  const res = cipher.update(zerores, 'utf8', 'base64') + cipher.final('base64')
+  return res
+}
+
+exports.decodeResponseParameters = (payload) => {
+  if (typeof payload != "string") throw new Error("Payload must be a base-64 encoded string")
+  const result = Buffer.from(payload, "base64").toString()
+  return JSON.parse(result)
+}
+
+exports.sha256Sign = (merchantKey, orderReference, params) => {
+  const derivateKey = encryptOrder(merchantKey, orderReference)
+  const bufferDerivate = Buffer.from(derivateKey, 'base64')
+  const hexMac256 = crypto.createHmac('sha256', bufferDerivate)
+    .update(params)
+    .digest('hex')
+  const signature = Buffer.from(hexMac256, 'hex').toString('base64')
+  return signature
+}
+
 exports.TRANSACTION_TYPES = {
   AUTHORIZATION: "0",// Autorización
   PRE_AUTHORIZATION: "1",// Preautorización
