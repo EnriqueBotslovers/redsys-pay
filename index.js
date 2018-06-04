@@ -4,17 +4,17 @@ const { CURRENCIES, TRANSACTION_TYPES, APPROVAL_CODES, TRANSACTION_ERROR_CODES, 
 
 function zeroPad(buf, blocksize) {
   if (typeof buf === 'string') {
-    buf = new Buffer(buf, 'utf8')
+    buf = Buffer.from(buf, 'utf8')
   }
-  var pad = new Buffer((blocksize - (buf.length % blocksize)) % blocksize)
+  var pad = Buffer.alloc((blocksize - (buf.length % blocksize)) % blocksize)
   pad.fill(0)
   return Buffer.concat([buf, pad])
 }
 
 function encryptOrder (orderRef) {
   if (!config.initialized) throw new Error("You must initialize your secret key first")
-  const secretKey = new Buffer(config.MERCHANT_SECRET_KEY, 'base64')
-  const iv = new Buffer(8)
+  const secretKey = Buffer.from(config.MERCHANT_SECRET_KEY, 'base64')
+  const iv = Buffer.alloc(8)
   iv.fill(0)
   const cipher = crypto.createCipheriv('des-ede3-cbc', secretKey, iv)
   cipher.setAutoPadding(false)
@@ -42,7 +42,7 @@ exports.initialize = function (merchantSecretKey) {
   config.initialized = true
 }
 
-exports.makePaymentParameters = function ({ amount, orderReference, merchantName, merchantCode, currency, transactionType, DateFrecuency, ChargeExpiryDate, DirectPayment, SumTotal, terminal = "1", merchantURL, successURL, errorURL }) {
+exports.makePaymentParameters = function ({ amount, orderReference, merchantName, merchantCode, currency, transactionType, DateFrecuency, ChargeExpiryDate, DirectPayment, MerchantIdentifier, SumTotal, terminal = "1", merchantURL, successURL, errorURL }) {
   if (!amount) throw new Error("The amount to charge is mandatory")
   if (!merchantCode) throw new Error("The merchant code is mandatory")
   if (!transactionType) throw new Error("The transcation type is mandatory")
@@ -72,16 +72,19 @@ exports.makePaymentParameters = function ({ amount, orderReference, merchantName
   if (ChargeExpiryDate) paramsObj.DS_MERCHANT_CHARGEEXPIRYDATE = ChargeExpiryDate
   if (SumTotal) paramsObj.DS_MERCHANT_SUMTOTAL = SumTotal
   if (DirectPayment) paramsObj.DS_MERCHANT_DIRECTPAYMENT = DirectPayment
+  if (MerchantIdentifier) paramsObj.DS_MERCHANT_IDENTIFIER = MerchantIdentifier
+  console.log(JSON.stringify(paramsObj))
 
   const payload = JSON.stringify(paramsObj)
-  const payloadBuffer = new Buffer(payload)
+  const payloadBuffer = Buffer.from(payload)
   const Ds_MerchantParameters = payloadBuffer.toString('base64')
   const derivateKey = encryptOrder(orderReference)
 
-  const hexMac256 = crypto.createHmac('sha256', new Buffer(derivateKey, 'base64'))
+  const bufferDerivate = Buffer.from(derivateKey, 'base64')
+  const hexMac256 = crypto.createHmac('sha256', bufferDerivate)
     .update(Ds_MerchantParameters)
     .digest('hex')
-  const Ds_Signature = new Buffer(hexMac256, 'hex').toString('base64')
+  const Ds_Signature = Buffer.from(hexMac256, 'hex').toString('base64')
 
 
   return {
@@ -105,11 +108,12 @@ exports.checkResponseParameters = function (strPayload, givenSignature) {
   const payload = decodeResponseParameters(strPayload)
   if (!payload || !payload.Ds_Order) return null // invalid response
   const derivateKey = encryptOrder(payload.Ds_Order)
+  const bufferDerivate = Buffer.from(derivateKey, 'base64')
 
-  const hexMac256 = crypto.createHmac('sha256', new Buffer(derivateKey, 'base64'))
+  const hexMac256 = crypto.createHmac('sha256', bufferDerivate)
     .update(strPayload)
     .digest('hex')
-  const signature = new Buffer(hexMac256, 'hex').toString('base64')
+  const signature = Buffer.from(hexMac256, 'hex').toString('base64')
 
   if(signature === givenSignature.replace('_', '/')) return payload
   else return null
