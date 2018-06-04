@@ -24,8 +24,6 @@ exports.makePaymentParameters = (paramsInput) => {
   if (!paramsInput.amount) throw new Error("The amount to charge is mandatory")
   if (!paramsInput.merchantCode) throw new Error("The merchant code is mandatory")
   if (!paramsInput.transactionType) throw new Error("The transcation type is mandatory")
-  if (!paramsInput.successURL) throw new Error("The successURL is mandatory")
-  if (!paramsInput.errorURL) throw new Error("The errorURL is mandatory")
   if (!paramsInput.terminal) paramsInput.terminal = 1
   if (!paramsInput.currency) paramsInput.currency = CURRENCIES.EUR
   if (!paramsInput.orderReference) {
