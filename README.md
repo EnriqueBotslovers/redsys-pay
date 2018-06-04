@@ -190,6 +190,12 @@ null
 
 ## About
 
-The present library is a work of Jordi Moraleda and Joel Moreno
+Based redsys-pos 0.9.0 library by Jordi Moraleda and Joel Moreno
 
-Node.js "crypto" implementation by Josep Subils
+Josep Subils updates:
+- Node.js "crypto" native implementation
+- Recursive payments
+- Add input parameters for diferent type of payments
+- Add response messages
+- ES2016 Code Updates
+- Solve Node.js 10.x Buffer deprecations
