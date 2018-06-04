@@ -51,6 +51,7 @@ exports.makePaymentParameters = (paramsInput) => {
   if (paramsInput.SumTotal) paramsObj.DS_MERCHANT_SUMTOTAL = paramsInput.SumTotal
   if (paramsInput.DirectPayment) paramsObj.DS_MERCHANT_DIRECTPAYMENT = paramsInput.DirectPayment
   if (paramsInput.Identifier) paramsObj.DS_MERCHANT_IDENTIFIER = paramsInput.Identifier
+  if (paramsInput.Group) paramsObj.DS_MERCHANT_GROUP = paramsInput.Group
 
   const payload = JSON.stringify(paramsObj)
   const payloadBuffer = Buffer.from(payload)

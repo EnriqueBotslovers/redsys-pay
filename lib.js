@@ -51,7 +51,8 @@ exports.TRANSACTION_TYPES = {
   DEFERRED_AUTHORIZATION_CONFIRMATION: "P",// Confirmación de autorización en diferido
   DEFERRED_AUTHORIZATION_CANCEL: "Q",// Anulación de autorización en diferido
   DEFERRED_INITIAL_FEE: "R",// Cuota inicial diferido
-  DEFERRED_SUCCESSIVE_FEE: "S" // Cuota sucesiva diferido
+  DEFERRED_SUCCESSIVE_FEE: "S", // Cuota sucesiva diferido
+  NO_AUTHENTICATION: "A" //Operaciones sin autenticacíon
 }
 
 // ISO 4217
