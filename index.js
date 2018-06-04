@@ -20,7 +20,23 @@ exports.initialize = (merchantSecretKey) => {
   config.initialized = true
 }
 
-exports.makePaymentParameters = ({ amount, orderReference, merchantName, merchantCode, currency, transactionType, DateFrecuency, ChargeExpiryDate, DirectPayment, MerchantIdentifier, SumTotal, terminal, merchantURL, successURL, errorURL }) => {
+exports.makePaymentParameters = ({
+  amount,
+  orderReference,
+  merchantName,
+  merchantCode,
+  currency,
+  transactionType,
+  DateFrecuency,
+  ChargeExpiryDate,
+  DirectPayment,
+  Identifier,
+  SumTotal,
+  terminal,
+  merchantURL,
+  successURL,
+  errorURL
+}) => {
   if (!amount) throw new Error("The amount to charge is mandatory")
   if (!merchantCode) throw new Error("The merchant code is mandatory")
   if (!transactionType) throw new Error("The transcation type is mandatory")
@@ -50,7 +66,7 @@ exports.makePaymentParameters = ({ amount, orderReference, merchantName, merchan
   if (ChargeExpiryDate) paramsObj.DS_MERCHANT_CHARGEEXPIRYDATE = ChargeExpiryDate
   if (SumTotal) paramsObj.DS_MERCHANT_SUMTOTAL = SumTotal
   if (DirectPayment) paramsObj.DS_MERCHANT_DIRECTPAYMENT = DirectPayment
-  if (MerchantIdentifier) paramsObj.DS_MERCHANT_IDENTIFIER = MerchantIdentifier
+  if (Identifier) paramsObj.DS_MERCHANT_IDENTIFIER = Identifier
   console.log(JSON.stringify(paramsObj))
 
   const payload = JSON.stringify(paramsObj)
