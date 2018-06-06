@@ -2,9 +2,7 @@ const crypto = require('crypto')
 const Buffer = require('buffer').Buffer
 
 const zeroPad = (buf, blocksize) => {
-  if (typeof buf === 'string') {
-    buf = Buffer.from(buf, 'utf8')
-  }
+  buf = Buffer.from(buf.toString(), 'utf8')
   var pad = Buffer.alloc((blocksize - (buf.length % blocksize)) % blocksize)
   pad.fill(0)
   return Buffer.concat([buf, pad])
