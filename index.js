@@ -8,6 +8,7 @@ var config = {
   PRODUCTION_URL: 'https://sis.redsys.es/sis/realizarPago'
 }
 
+exports.sha256Sign = sha256Sign
 exports.CURRENCIES = CURRENCIES
 exports.TRANSACTION_TYPES = TRANSACTION_TYPES
 exports.APPROVAL_CODES = APPROVAL_CODES
@@ -60,6 +61,49 @@ exports.makePaymentParameters = (paramsInput) => {
     Ds_MerchantParameters,
     Ds_Signature
   }
+}
+exports.makePaymentParametersForApi = (paramsInput) => {
+  if (!paramsInput.amount) throw new Error("The amount to charge is mandatory")
+  if (!paramsInput.merchantCode) throw new Error("The merchant code is mandatory")
+  if (!paramsInput.transactionType) throw new Error("The transcation type is mandatory")
+  if (!paramsInput.terminal) paramsInput.terminal = 1
+  if (!paramsInput.currency) paramsInput.currency = CURRENCIES.EUR
+  if (!paramsInput.orderReference) {
+    paramsInput.orderReference = Date.now()
+    console.log("Warning: no orderReference provided. Using", paramsInput.orderReference)
+  }
+
+  const paramsObj = {
+    DS_MERCHANT_AMOUNT: String(paramsInput.amount),
+    DS_MERCHANT_ORDER: paramsInput.orderReference,
+    DS_MERCHANT_MERCHANTCODE: paramsInput.merchantCode,
+    DS_MERCHANT_CURRENCY: paramsInput.currency,
+    DS_MERCHANT_TRANSACTIONTYPE: paramsInput.transactionType,
+    DS_MERCHANT_TERMINAL: paramsInput.terminal
+  }
+  if (paramsInput.merchantName) paramsObj.DS_MERCHANT_MERCHANTNAME = paramsInput.merchantName
+  if (paramsInput.merchantURL) paramsObj.DS_MERCHANT_MERCHANTURL = paramsInput.merchantURL
+  if (paramsInput.errorURL) paramsObj.DS_MERCHANT_URLKO = paramsInput.errorURL
+  if (paramsInput.successURL) paramsObj.DS_MERCHANT_URLOK = paramsInput.successURL
+  if (paramsInput.DateFrecuency) paramsObj.DS_MERCHANT_DATEFRECUENCY = paramsInput.DateFrecuency
+  if (paramsInput.ChargeExpiryDate) paramsObj.DS_MERCHANT_CHARGEEXPIRYDATE = paramsInput.ChargeExpiryDate
+  if (paramsInput.SumTotal) paramsObj.DS_MERCHANT_SUMTOTAL = paramsInput.SumTotal
+  if (paramsInput.DirectPayment) paramsObj.DS_MERCHANT_DIRECTPAYMENT = paramsInput.DirectPayment
+  if (paramsInput.Identifier) paramsObj.DS_MERCHANT_IDENTIFIER = paramsInput.Identifier
+  if (paramsInput.Group) paramsObj.DS_MERCHANT_GROUP = paramsInput.Group
+
+  const payload = JSON.stringify(paramsObj)
+  const payloadBuffer = Buffer.from(payload)
+  const Ds_MerchantParameters = payloadBuffer.toString('base64')
+  const Ds_Signature = sha256Sign(config.MERCHANT_SECRET_KEY, paramsInput.orderReference, Ds_MerchantParameters)
+
+  return {
+    REQUEST: {
+      DATOSENTRADA: paramsObj,
+      DS_SIGNATUREVERSION: "HMAC_SHA256_V1",
+      DS_SIGNATURE: Ds_Signature
+    }
+  } 
 }
 
 exports.checkResponseParameters = (strPayload, givenSignature) => {
