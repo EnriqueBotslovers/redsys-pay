@@ -5,9 +5,13 @@ var config = {
   initialized: false,
   MERCHANT_SECRET_KEY: '', //base64
   SANDBOX_URL: 'https://sis-t.redsys.es:25443/sis/realizarPago',
-  PRODUCTION_URL: 'https://sis.redsys.es/sis/realizarPago'
+  PRODUCTION_URL: 'https://sis.redsys.es/sis/realizarPago',
+  SOAP_URL: 'https://sis-t.redsys.es:25443/sis/services/SerClsWSEntrada/wsdl/SerClsWSEntrada.wsdl'
 }
 
+exports.SOAP_URL = config.SOAP_URL
+exports.SANDBOX_URL = config.SANDBOX_URL
+exports.PRODUCTION_URL = config.PRODUCTION_URL
 exports.sha256Sign = sha256Sign
 exports.CURRENCIES = CURRENCIES
 exports.TRANSACTION_TYPES = TRANSACTION_TYPES
