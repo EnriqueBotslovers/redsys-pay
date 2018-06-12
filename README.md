@@ -179,9 +179,9 @@ null
 ### makePaymentParameters AND makePaymentParametersWS accepted parameters:
 * amount
 * orderReference
-* merchantCode,
-* currency,
-* transactionType,
+* merchantCode
+* currency
+* transactionType
 * terminal
 * merchantName
 * merchantURL
@@ -204,6 +204,7 @@ Based [redsys-pos 0.9.0](https://github.com/TvrboPro/redsys-pos) library by Jord
 Josep Subils updates:
 - Node.js "crypto" native implementation
 - Recursive payments
+- Web Service parameters generator
 - Add input parameters for diferent type of payments
 - Add response messages
 - ES2016 Code Updates
