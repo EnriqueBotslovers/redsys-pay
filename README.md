@@ -199,7 +199,7 @@ null
 
 ## About
 
-Based redsys-pos 0.9.0 library by Jordi Moraleda and Joel Moreno
+Based [redsys-pos 0.9.0](https://github.com/TvrboPro/redsys-pos) library by Jordi Moraleda and Joel Moreno
 
 Josep Subils updates:
 - Node.js "crypto" native implementation
