@@ -1,3 +1,72 @@
+const crypto = require('crypto')
+const Buffer = require('buffer').Buffer
+
+const zeroPad = (buf, blocksize) => {
+  buf = Buffer.from(buf.toString(), 'utf8')
+  var pad = Buffer.alloc((blocksize - (buf.length % blocksize)) % blocksize)
+  pad.fill(0)
+  return Buffer.concat([buf, pad])
+}
+
+const encryptOrder = (merchantKey, orderRef) => {
+  const secretKey = Buffer.from(merchantKey, 'base64')
+  const iv = Buffer.alloc(8)
+  iv.fill(0)
+  const cipher = crypto.createCipheriv('des-ede3-cbc', secretKey, iv)
+  cipher.setAutoPadding(false)
+  const zerores = zeroPad(orderRef, 8)
+  const res = cipher.update(zerores, 'utf8', 'base64') + cipher.final('base64')
+  return res
+}
+
+exports.decodeResponseParameters = (payload) => {
+  if (typeof payload != "string") throw new Error("Payload must be a base-64 encoded string")
+  const result = Buffer.from(payload, "base64").toString()
+  return JSON.parse(result)
+}
+
+exports.sha256Sign = (merchantKey, orderReference, params) => {
+  const derivateKey = encryptOrder(merchantKey, orderReference)
+  const bufferDerivate = Buffer.from(derivateKey, 'base64')
+  const hexMac256 = crypto.createHmac('sha256', bufferDerivate)
+    .update(params)
+    .digest('hex')
+  const signature = Buffer.from(hexMac256, 'hex').toString('base64')
+  return signature
+}
+
+exports.inputValidate = (paramsInput) => {
+  if (!paramsInput.amount) throw new Error("The amount to charge is mandatory")
+  if (!paramsInput.merchantCode) throw new Error("The merchant code is mandatory")
+  if (!paramsInput.transactionType) throw new Error("The transcation type is mandatory")
+  if (!paramsInput.orderReference) throw new Error("Warning: no orderReference provided.")
+  if (!paramsInput.terminal) paramsInput.terminal = 1
+  if (!paramsInput.currency) paramsInput.currency = CURRENCIES.EUR
+
+  const paramsObj = {
+    DS_MERCHANT_AMOUNT: String(paramsInput.amount),
+    DS_MERCHANT_ORDER: paramsInput.orderReference,
+    DS_MERCHANT_MERCHANTCODE: paramsInput.merchantCode,
+    DS_MERCHANT_CURRENCY: paramsInput.currency,
+    DS_MERCHANT_TRANSACTIONTYPE: paramsInput.transactionType,
+    DS_MERCHANT_TERMINAL: paramsInput.terminal
+  }
+  if (paramsInput.merchantName) paramsObj.DS_MERCHANT_MERCHANTNAME = paramsInput.merchantName
+  if (paramsInput.merchantURL) paramsObj.DS_MERCHANT_MERCHANTURL = paramsInput.merchantURL
+  if (paramsInput.errorURL) paramsObj.DS_MERCHANT_URLKO = paramsInput.errorURL
+  if (paramsInput.successURL) paramsObj.DS_MERCHANT_URLOK = paramsInput.successURL
+  if (paramsInput.DateFrecuency) paramsObj.DS_MERCHANT_DATEFRECUENCY = paramsInput.DateFrecuency
+  if (paramsInput.ChargeExpiryDate) paramsObj.DS_MERCHANT_CHARGEEXPIRYDATE = paramsInput.ChargeExpiryDate
+  if (paramsInput.SumTotal) paramsObj.DS_MERCHANT_SUMTOTAL = paramsInput.SumTotal
+  if (paramsInput.DirectPayment) paramsObj.DS_MERCHANT_DIRECTPAYMENT = paramsInput.DirectPayment
+  if (paramsInput.Identifier) paramsObj.DS_MERCHANT_IDENTIFIER = paramsInput.Identifier
+  if (paramsInput.Group) paramsObj.DS_MERCHANT_GROUP = paramsInput.Group
+  if (paramsInput.Pan) paramsObj.DS_MERCHANT_PAN = paramsInput.Pan
+  if (paramsInput.ExpiryDate) paramsObj.DS_MERCHANT_EXPIRYDATE = paramsInput.ExpiryDate
+  if (paramsInput.CVV2) paramsObj.DS_MERCHANT_CVV2 = paramsInput.CVV2
+  return paramsObj
+}
+
 exports.TRANSACTION_TYPES = {
   AUTHORIZATION: "0",// Autorización
   PRE_AUTHORIZATION: "1",// Preautorización
@@ -12,17 +81,20 @@ exports.TRANSACTION_TYPES = {
   DEFERRED_AUTHORIZATION_CONFIRMATION: "P",// Confirmación de autorización en diferido
   DEFERRED_AUTHORIZATION_CANCEL: "Q",// Anulación de autorización en diferido
   DEFERRED_INITIAL_FEE: "R",// Cuota inicial diferido
-  DEFERRED_SUCCESSIVE_FEE: "S" // Cuota sucesiva diferido
+  DEFERRED_SUCCESSIVE_FEE: "S", // Cuota sucesiva diferido
+  NO_AUTHENTICATION: "A" //Operaciones sin autenticacíon
 }
 
 // ISO 4217
-exports.CURRENCIES = {
+const CURRENCIES = {
   EUR: "978",
   USD: "840",
   GBP: "826",
   JPY: "392",
   RUB: "643"
 }
+
+exports.CURRENCIES = CURRENCIES
 
 exports.APPROVAL_CODES = {
   "000": "Transacción autorizada por el banco emisor de la tarjeta",

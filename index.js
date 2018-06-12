@@ -1,88 +1,36 @@
-var crypto = require('crypto')
-var Buffer = require('buffer').Buffer
-const { CURRENCIES, TRANSACTION_TYPES, APPROVAL_CODES, TRANSACTION_ERROR_CODES, SIS_ERROR_CODES } = require('./lib.js')
-
-function zeroPad(buf, blocksize) {
-  if (typeof buf === 'string') {
-    buf = new Buffer(buf, 'utf8')
-  }
-  var pad = new Buffer((blocksize - (buf.length % blocksize)) % blocksize)
-  pad.fill(0)
-  return Buffer.concat([buf, pad])
-}
-
-function encryptOrder (orderRef) {
-  if (!config.initialized) throw new Error("You must initialize your secret key first")
-  const secretKey = new Buffer(config.MERCHANT_SECRET_KEY, 'base64')
-  const iv = new Buffer(8)
-  iv.fill(0)
-  const cipher = crypto.createCipheriv('des-ede3-cbc', secretKey, iv)
-  cipher.setAutoPadding(false)
-  const zerores = zeroPad(orderRef, 8)
-  const res = cipher.update(zerores, 'utf8', 'base64') + cipher.final('base64')
-  return res
-}
+const Buffer = require('buffer').Buffer
+const { CURRENCIES, TRANSACTION_TYPES, APPROVAL_CODES, TRANSACTION_ERROR_CODES, SIS_ERROR_CODES, sha256Sign, decodeResponseParameters, inputValidate } = require('./lib.js')
 
 var config = {
   initialized: false,
   MERCHANT_SECRET_KEY: '', //base64
   SANDBOX_URL: 'https://sis-t.redsys.es:25443/sis/realizarPago',
-  PRODUCTION_URL: 'https://sis.redsys.es/sis/realizarPago'
+  PRODUCTION_URL: 'https://sis.redsys.es/sis/realizarPago',
+  SOAP_URL: 'https://sis-t.redsys.es:25443/sis/services/SerClsWSEntrada/wsdl/SerClsWSEntrada.wsdl'
 }
 
+exports.SOAP_URL = config.SOAP_URL
+exports.SANDBOX_URL = config.SANDBOX_URL
+exports.PRODUCTION_URL = config.PRODUCTION_URL
+exports.sha256Sign = sha256Sign
 exports.CURRENCIES = CURRENCIES
 exports.TRANSACTION_TYPES = TRANSACTION_TYPES
 exports.APPROVAL_CODES = APPROVAL_CODES
 exports.TRANSACTION_ERROR_CODES = TRANSACTION_ERROR_CODES
 exports.SIS_ERROR_CODES = SIS_ERROR_CODES
 
-exports.initialize = function (merchantSecretKey) {
+exports.initialize = (merchantSecretKey) => {
   if (!merchantSecretKey) throw new Error("The merchant secret key is mandatory")
   config.MERCHANT_SECRET_KEY = merchantSecretKey
   config.initialized = true
 }
 
-exports.makePaymentParameters = function ({ amount, orderReference, merchantName, merchantCode, currency, transactionType, DateFrecuency, ChargeExpiryDate, DirectPayment, SumTotal, terminal = "1", merchantURL, successURL, errorURL }) {
-  if (!amount) throw new Error("The amount to charge is mandatory")
-  if (!merchantCode) throw new Error("The merchant code is mandatory")
-  if (!transactionType) throw new Error("The transcation type is mandatory")
-  if (!successURL) throw new Error("The successURL is mandatory")
-  if (!errorURL) throw new Error("The errorURL is mandatory")
-
-  if (!currency) currency = CURRENCIES.EUR
-  if (!orderReference) {
-    orderReference = Date.now()
-    console.log("Warning: no orderReference provided. Using", orderReference)
-  }
-
-  const paramsObj = {
-    DS_MERCHANT_AMOUNT: String(amount),
-    DS_MERCHANT_ORDER: orderReference,
-    DS_MERCHANT_MERCHANTNAME: merchantName,
-    DS_MERCHANT_MERCHANTCODE: merchantCode,
-    DS_MERCHANT_CURRENCY: currency,
-    DS_MERCHANT_TRANSACTIONTYPE: transactionType,
-    DS_MERCHANT_TERMINAL: terminal,
-    DS_MERCHANT_MERCHANTURL: merchantURL || '',
-    DS_MERCHANT_URLOK: successURL || '',
-    DS_MERCHANT_URLKO: errorURL || ''
-  }
-
-  if (DateFrecuency) paramsObj.DS_MERCHANT_DATEFRECUENCY = DateFrecuency
-  if (ChargeExpiryDate) paramsObj.DS_MERCHANT_CHARGEEXPIRYDATE = ChargeExpiryDate
-  if (SumTotal) paramsObj.DS_MERCHANT_SUMTOTAL = SumTotal
-  if (DirectPayment) paramsObj.DS_MERCHANT_DIRECTPAYMENT = DirectPayment
-
+exports.makePaymentParameters = (paramsInput) => {
+  const paramsObj = inputValidate(paramsInput)
   const payload = JSON.stringify(paramsObj)
-  const payloadBuffer = new Buffer(payload)
+  const payloadBuffer = Buffer.from(payload)
   const Ds_MerchantParameters = payloadBuffer.toString('base64')
-  const derivateKey = encryptOrder(orderReference)
-
-  const hexMac256 = crypto.createHmac('sha256', new Buffer(derivateKey, 'base64'))
-    .update(Ds_MerchantParameters)
-    .digest('hex')
-  const Ds_Signature = new Buffer(hexMac256, 'hex').toString('base64')
-
+  const Ds_Signature = sha256Sign(config.MERCHANT_SECRET_KEY, paramsInput.orderReference, Ds_MerchantParameters)
 
   return {
     Ds_SignatureVersion: "HMAC_SHA256_V1",
@@ -91,31 +39,36 @@ exports.makePaymentParameters = function ({ amount, orderReference, merchantName
   }
 }
 
-function decodeResponseParameters(payload) {
-  if (typeof payload != "string") throw new Error("Payload must be a base-64 encoded string")
-  const result = Buffer.from(payload, "base64").toString()
-  return JSON.parse(result)
+exports.makePaymentParametersForApi = (paramsInput) => {
+  const paramsObj = inputValidate(paramsInput)
+  const payload = JSON.stringify(paramsObj)
+  const payloadBuffer = Buffer.from(payload)
+  const Ds_MerchantParameters = payloadBuffer.toString('base64')
+  const Ds_Signature = sha256Sign(config.MERCHANT_SECRET_KEY, paramsInput.orderReference, Ds_MerchantParameters)
+
+  return {
+    REQUEST: {
+      DATOSENTRADA: paramsObj,
+      DS_SIGNATUREVERSION: "HMAC_SHA256_V1",
+      DS_SIGNATURE: Ds_Signature
+    }
+  } 
 }
 
-exports.checkResponseParameters = function (strPayload, givenSignature) {
+exports.checkResponseParameters = (strPayload, givenSignature) => {
   if (!config.initialized) throw new Error("You must initialize the component first")
   else if (!strPayload) throw new Error("The payload is required")
   else if (!givenSignature) throw new Error("The signature is required")
 
   const payload = decodeResponseParameters(strPayload)
   if (!payload || !payload.Ds_Order) return null // invalid response
-  const derivateKey = encryptOrder(payload.Ds_Order)
+  const Ds_Signature = sha256Sign(config.MERCHANT_SECRET_KEY, payload.Ds_Order, strPayload)
 
-  const hexMac256 = crypto.createHmac('sha256', new Buffer(derivateKey, 'base64'))
-    .update(strPayload)
-    .digest('hex')
-  const signature = new Buffer(hexMac256, 'hex').toString('base64')
-
-  if(signature === givenSignature.replace('_', '/')) return payload
+  if(Ds_Signature === givenSignature.replace('_', '/')) return payload
   else return null
 }
 
-exports.getResponseCodeMessage = function (code) {
+exports.getResponseCodeMessage = (code) => {
   if (!code || typeof code !== "string") return null
   code = code.replace(/^0*/, '')
   if (Array(100).fill(0).map((val, index) => index.toString().padStart(4, '0')).includes(code)) return "Transacción autorizada para pagos y preautorizaciones"
