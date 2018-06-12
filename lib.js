@@ -39,12 +39,9 @@ exports.inputValidate = (paramsInput) => {
   if (!paramsInput.amount) throw new Error("The amount to charge is mandatory")
   if (!paramsInput.merchantCode) throw new Error("The merchant code is mandatory")
   if (!paramsInput.transactionType) throw new Error("The transcation type is mandatory")
+  if (!paramsInput.orderReference) throw new Error("Warning: no orderReference provided.")
   if (!paramsInput.terminal) paramsInput.terminal = 1
   if (!paramsInput.currency) paramsInput.currency = CURRENCIES.EUR
-  if (!paramsInput.orderReference) {
-    paramsInput.orderReference = Date.now()
-    console.log("Warning: no orderReference provided. Using", paramsInput.orderReference)
-  }
 
   const paramsObj = {
     DS_MERCHANT_AMOUNT: String(paramsInput.amount),
@@ -64,6 +61,9 @@ exports.inputValidate = (paramsInput) => {
   if (paramsInput.DirectPayment) paramsObj.DS_MERCHANT_DIRECTPAYMENT = paramsInput.DirectPayment
   if (paramsInput.Identifier) paramsObj.DS_MERCHANT_IDENTIFIER = paramsInput.Identifier
   if (paramsInput.Group) paramsObj.DS_MERCHANT_GROUP = paramsInput.Group
+  if (paramsInput.Pan) paramsObj.DS_MERCHANT_PAN = paramsInput.Pan
+  if (paramsInput.ExpiryDate) paramsObj.DS_MERCHANT_EXPIRYDATE = paramsInput.ExpiryDate
+  if (paramsInput.CVV2) paramsObj.DS_MERCHANT_CVV2 = paramsInput.CVV2
   return paramsObj
 }
 
