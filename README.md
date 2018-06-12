@@ -34,9 +34,9 @@ const obj = {
   currency: CURRENCIES.EUR,
   transactionType: TRANSACTION_TYPES.AUTHORIZATION, // '0'
   terminal: '1',
-  merchantURL: 'http://myshop.com/merchant',
-  successURL: 'http://myshop.com/success',
-  errorURL: 'http://myshop.com/error'
+  merchantURL: 'http://shop.js.gl/merchant',
+  successURL: 'http://shop.js.gl/success',
+  errorURL: 'http://shop.js.gl/error'
 }
 
 const result = makePaymentParameters(obj)
@@ -46,57 +46,48 @@ console.log(result);
 The above code will print:
 
 ```js
-{
+const form_params = {
   Ds_SignatureVersion: 'HMAC_SHA256_V1',
   Ds_MerchantParameters: 'eyJEU19NRVJDSEFOVF9BTU9VTlQiOiIxMDAiLCJEU19NRVJDSEFOVF9PUkRFUiI6IjE1MDg0MjgzNjAiLCJEU19NRVJDSEFOVF9NRVJDSEFOVE5BTUUiOiJUZXN0aW5nIFNob3AiLCJEU19NRVJDSEFOVF9NRVJDSEFOVENPREUiOiIzMjcyMzQ2ODgiLCJEU19NRVJDSEFOVF9DVVJSRU5DWSI6Ijk3OCIsIkRTX01FUkNIQU5UX1RSQU5TQUNUSU9OVFlQRSI6IjAiLCJEU19NRVJDSEFOVF9URVJNSU5BTCI6IjEiLCJEU19NRVJDSEFOVF9NRVJDSEFOVFVSTCI6IiIsIkRTX01FUkNIQU5UX1VSTE9LIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3N1Y2Nlc3MiLCJEU19NRVJDSEFOVF9VUkxLTyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9lcnJvciJ9',
   Ds_Signature: 'qkMJMWR6Dq32xwbQuguTv39OvXv4KdD1Xg7pZ8phGZI='
 }
 ```
-
-Send the above JSON to the browser, and submit a form like below:
-
+With [express.js](http://expressjs.com) you can send object to view:
 ```js
-const form = document.createElement("form")
-if(DEBUG) {
-  form.setAttribute("action", "https://sis-t.redsys.es:25443/sis/realizarPago")
-} else {
-  form.setAttribute("action", "https://sis.redsys.es/sis/realizarPago")
-}
-form.setAttribute("method", "POST")
-form.setAttribute("style", "display: none")
-
-// Parameters
-const field = document.createElement("input")
-field.setAttribute("type", "hidden")
-field.setAttribute("name", "Ds_SignatureVersion")
-field.setAttribute("value", result.Ds_SignatureVersion)
-form.appendChild(field)
-
-const field = document.createElement("input")
-field.setAttribute("type", "hidden")
-field.setAttribute("name", "Ds_MerchantParameters")
-field.setAttribute("value", result.Ds_MerchantParameters)
-form.appendChild(field)
-
-const field = document.createElement("input")
-field.setAttribute("type", "hidden")
-field.setAttribute("name", "Ds_Signature")
-field.setAttribute("value", result.Ds_Signature)
-form.appendChild(field)
-
-document.body.appendChild(form)
-form.submit()
+app.get('/form/', (req, res) => {
+  const form_params = req.body
+  res.render('form', form_params)
+})
 ```
 
-For a detailed example, check out `example/frontend.html`
+This is a [ejs](http://ejs.co) template view:
 
-The official recommended mechanism is a plain old HTML form as below, which is an equivalent of the JS code above:
+```html
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+  <form name="from" action="https://sis-t.redsys.es:25443/sis/realizarPago" method="POST">
+    <input type="hidden" name="Ds_SignatureVersion" value="<%- Ds_SignatureVersion %>" />
+    <input type="hidden" name="Ds_MerchantParameters" value="<%- Ds_MerchantParameters %>" />
+    <input type="hidden" name="Ds_Signature" value="<%- Ds_Signature %>" />
+    <input type="submit" value="Go to pay">
+  </form>
+</body>
+</html>
+```
+
+For a detailed example, check out `example/`
+
+Need make html same this:
 
 ```html
   <form name="from" action="https://sis-t.redsys.es:25443/sis/realizarPago" method="POST">
   <input type="hidden" name="Ds_SignatureVersion" value="HMAC_SHA256_V1" />
   <input type="hidden" name="Ds_MerchantParameters" value="eyJEU19NRVJDSEFOVF9BTU9VTlQiOiIxMDAiLCJEU19NRVJDSEFOVF9PUkRFUiI6IjE1MDg0MjgzNjAiLCJEU19NRVJDSEFOVF9NRVJDSEFOVE5BTUUiOiJUZXN0aW5nIFNob3AiLCJEU19NRVJDSEFOVF9NRVJDSEFOVENPREUiOiIzMjcyMzQ2ODgiLCJEU19NRVJDSEFOVF9DVVJSRU5DWSI6Ijk3OCIsIkRTX01FUkNIQU5UX1RSQU5TQUNUSU9OVFlQRSI6IjAiLCJEU19NRVJDSEFOVF9URVJNSU5BTCI6IjEiLCJEU19NRVJDSEFOVF9NRVJDSEFOVFVSTCI6IiIsIkRTX01FUkNIQU5UX1VSTE9LIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3N1Y2Nlc3MiLCJEU19NRVJDSEFOVF9VUkxLTyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9lcnJvciJ9" />
   <input type="hidden" name="Ds_Signature" value="qkMJMWR6Dq32xwbQuguTv39OvXv4KdD1Xg7pZ8phGZI=" />
+  <input type="submit" value="Go to pay">
   </form>
 ```
 
@@ -142,11 +133,11 @@ If an invalid response or signature is provided:
 // Check a response
 const { checkResponseParameters } = require("redsys-pos")
 
-const merchantParams = "eyJEc19EYXRlIjoiMjAlMkYxMCUyRjIwMTciLCJEc19Ib3VyIjoiMTclM0EyMyIsIkRzX1NlY3VyZVBheW1lbnQiOiIwIiwiRHNfQW1vdW50IjoiMTAwIiwiRHNfQ3VycmVuY3kiOiI5NzgiLCJEc19PcmRlciI6IjAwMDA5NjU1RDg0IiwiRHNfTWVyY2hhbnRDb2RlIjoiMzI3MjM0Njg4IiwiRHNfVGVybWluYWwiOiIwMDEiLCJEc19SZXNwb25zZSI6Ijk5MTUiLCJEc19UcmFuc2FjdGlvblR5cGUiOiIwIiwiRHNfTWVyY2hhbnREYXRhIjoiIiwiRHNfQXV0aG9yaXNhdGlvbkNvZGUiOiIrKysrKysiLCJEc19Db25zdW1lckxhbmd1YWdlIjoiMSJ9";
+const merchantParams = "eyJEc19EYXRlIjoiMjAlMkYxMCUyRjIwMTciLCJEc19Ib3VyIjoiMTclM0EyMyIsIkRzX1NlY3VyZVBheW1lbnQiOiIwIiwiRHNfQW1vdW50IjoiMTAwIiwiRHNfQ3VycmVuY3kiOiI5NzgiLCJEc19PcmRlciI6IjAwMDA5NjU1RDg0IiwiRHNfTWVyY2hhbnRDb2RlIjoiMzI3MjM0Njg4IiwiRHNfVGVybWluYWwiOiIwMDEiLCJEc19SZXNwb25zZSI6Ijk5MTUiLCJEc19UcmFuc2FjdGlvblR5cGUiOiIwIiwiRHNfTWVyY2hhbnREYXRhIjoiIiwiRHNfQXV0aG9yaXNhdGlvbkNvZGUiOiIrKysrKysiLCJEc19Db25zdW1lckxhbmd1YWdlIjoiMSJ9"
 const invalidSignature = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa="
 
 result = checkResponseParameters(merchantParams, invalidSignature)
-console.log(result);
+console.log(result)
 ```
 
 This will print:
@@ -161,7 +152,7 @@ null
 const { getResponseCodeMessage } = require("redsys-pos")
 
 var str = getResponseCodeMessage("0180")
-console.log(str);
+console.log(str)
 ```
 
 This will print:
@@ -184,6 +175,27 @@ This will print:
 ```
 null
 ```
+
+### makePaymentParameters AND makePaymentParametersWS accepted parameters:
+* amount
+* orderReference
+* merchantCode,
+* currency,
+* transactionType,
+* terminal
+* merchantName
+* merchantURL
+* errorURL
+* successURL
+* DateFrecuency
+* ChargeExpiryDate
+* SumTotal
+* DirectPayment
+* Identifier
+* Group
+* Pan
+* ExpiryDate
+* CVV2
 
 ## About
 
