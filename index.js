@@ -38,6 +38,7 @@ exports.makePaymentParameters = (paramsInput) => {
     Ds_Signature
   }
 }
+
 exports.makePaymentParametersForApi = (paramsInput) => {
   const paramsObj = inputValidate(paramsInput)
   const payload = JSON.stringify(paramsObj)
