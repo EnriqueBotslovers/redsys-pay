@@ -6,7 +6,7 @@ var config = {
   MERCHANT_SECRET_KEY: '', //base64
   SANDBOX_URL: 'https://sis-t.redsys.es:25443/sis/realizarPago',
   PRODUCTION_URL: 'https://sis.redsys.es/sis/realizarPago',
-  SOAP_URL: 'https://sis-t.redsys.es:25443/sis/services/SerClsWSEntrada/wsdl/SerClsWSEntrada.wsdl'
+  SOAP_URL: 'https://sis.redsys.es/sis/services/SerClsWSEntrada/wsdl/SerClsWSEntrada.wsdl'
 }
 
 exports.SOAP_URL = config.SOAP_URL
