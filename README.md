@@ -182,7 +182,7 @@ Install soap client
 npm i soap
 ```
 
-### API SOAP EXAMPLE:
+Simple example with identifier:
 ```js
 const {
   initialize,
@@ -193,7 +193,7 @@ const {
 } = require('redsys-pay')
 const soap = require('soap')
 
-const MERCHANT_KEY = "adad" // TESTING KEY
+const MERCHANT_KEY = "sq7HjrUOBfKmC576ILgskD5srU870gJ7" // TESTING KEY
 initialize(MERCHANT_KEY)
 
 const dataparams = {
