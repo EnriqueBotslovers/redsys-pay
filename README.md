@@ -176,6 +176,56 @@ This will print:
 null
 ```
 
+### API SOAP REQUEST
+Install soap client
+```sh
+npm i soap
+```
+
+### API SOAP EXAMPLE:
+```js
+const {
+  initialize,
+  CURRENCIES,
+  TRANSACTION_TYPES,
+  makePaymentParametersForApi,
+  SOAP_URL
+} = require('redsys-pay')
+const soap = require('soap')
+
+const MERCHANT_KEY = "adad" // TESTING KEY
+initialize(MERCHANT_KEY)
+
+const dataparams = {
+  orderReference: 000123,
+  amount: '100',
+  merchantCode: '327234688',
+  Identifier: 'b0f74a4sd344Sad23E3dfdebb9d36',
+  transactionType: TRANSACTION_TYPES.NO_AUTHENTICATION,
+  terminal: '1',
+  currency: CURRENCIES.EUR,
+  Ds_ExpiryDate: "2012",
+  merchantURL: `http://shop.js.gl/merchant`,
+  DirectPayment: true
+}
+
+const params = makePaymentParametersWS(dataparams)
+
+soap.createClient(SOAP_URL, (err, client) => {
+  if (err) throw new Error(err)
+  else {
+    client.trataPeticion(params, (err2, result, rawResponse) => {
+      if (err2) throw new Error(err2)
+      else {
+        console.log(JSON.stringify(rawResponse))
+        console.log(JSON.stringify(result))
+      }
+    })
+  }
+})
+```
+
+
 ### makePaymentParameters AND makePaymentParametersWS accepted parameters:
 * amount
 * orderReference
