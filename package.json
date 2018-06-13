@@ -1,9 +1,13 @@
 {
   "name": "redsys-pay",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "(redsys-pos fork) Node JS library to ease the communication with RedSys point of sales",
   "main": "index.js",
   "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/warlock/redsys-pay.git"
+  },
   "keywords": [
     "redsys",
     "sabadell",
