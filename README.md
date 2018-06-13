@@ -209,3 +209,4 @@ Josep Subils updates:
 - Add response messages
 - ES2016 Code Updates
 - Solve Node.js 10.x Buffer deprecations
+- No external dependencies need
