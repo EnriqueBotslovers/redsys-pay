@@ -27,9 +27,9 @@ secretKey("sq7HjrUOBfKmC576ILgskD5srU870gJ7")
 
 const obj = {
   amount: '100', // cents (in euro)
-  orderReference: '1508428360',
-  merchantName: "INTEGRATION TEST SHOP",
-  merchantCode: '327234688',
+  orderReference: '123123',
+  merchantName: "REDSYS PAY SHOP",
+  merchantCode: '123123123',
   currency: CURRENCIES.EUR,
   transactionType: TRANSACTION_TYPES.AUTHORIZATION, // '0'
   terminal: '1',
@@ -197,14 +197,14 @@ secretKey("sq7HjrUOBfKmC576ILgskD5srU870gJ7")
 const dataparams = {
   orderReference: 000123,
   amount: '100',
-  merchantCode: '327234688',
-  identifier: 'b0f74a4sd344Sad23E3dfdebb9d36',
+  merchantCode: '123123123',
+  identifier: 'REQUIERED',
   transactionType: TRANSACTION_TYPES.NO_AUTHENTICATION,
   terminal: '1',
   currency: CURRENCIES.EUR,
+  pan: '1234123412341234',
   expiryDate: "2012",
-  merchantURL: `http://shop.js.gl/merchant`,
-  directPayment: true
+  CVV2: '123'
 }
 
 const params = makeApiParameters(dataparams)
