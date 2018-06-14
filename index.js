@@ -30,7 +30,7 @@ exports.makeParameters = (paramsInput) => {
   const payload = JSON.stringify(paramsObj)
   const payloadBuffer = Buffer.from(payload)
   const Ds_MerchantParameters = payloadBuffer.toString('base64')
-  const Ds_Signature = sha256Sign(config.MERCHANT_SECRET_KEY, paramsInput.orderReference, Ds_MerchantParameters)
+  const Ds_Signature = sha256Sign(config.MERCHANT_SECRET_KEY, paramsInput.order, Ds_MerchantParameters)
 
   return {
     Ds_SignatureVersion: "HMAC_SHA256_V1",
@@ -44,7 +44,7 @@ exports.makeApiParameters = (paramsInput) => {
   const payload = JSON.stringify(paramsObj)
   const payloadBuffer = Buffer.from(payload)
   const Ds_MerchantParameters = payloadBuffer.toString('base64')
-  const Ds_Signature = sha256Sign(config.MERCHANT_SECRET_KEY, paramsInput.orderReference, Ds_MerchantParameters)
+  const Ds_Signature = sha256Sign(config.MERCHANT_SECRET_KEY, paramsInput.order, Ds_MerchantParameters)
 
   return {
     REQUEST: {

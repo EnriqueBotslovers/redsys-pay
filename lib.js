@@ -25,8 +25,8 @@ exports.decodeResponseParameters = (payload) => {
   return JSON.parse(result)
 }
 
-exports.sha256Sign = (merchantKey, orderReference, params) => {
-  const derivateKey = encryptOrder(merchantKey, orderReference)
+exports.sha256Sign = (merchantKey, order, params) => {
+  const derivateKey = encryptOrder(merchantKey, order)
   const bufferDerivate = Buffer.from(derivateKey, 'base64')
   const hexMac256 = crypto.createHmac('sha256', bufferDerivate)
     .update(params)
@@ -39,13 +39,13 @@ exports.inputValidate = (paramsInput) => {
   if (!paramsInput.amount) throw new Error("The amount to charge is mandatory")
   if (!paramsInput.merchantCode) throw new Error("The merchant code is mandatory")
   if (!paramsInput.transactionType) throw new Error("The transcation type is mandatory")
-  if (!paramsInput.orderReference) throw new Error("Warning: no orderReference provided.")
+  if (!paramsInput.order) throw new Error("Warning: no order reference provided.")
   if (!paramsInput.terminal) paramsInput.terminal = 1
   if (!paramsInput.currency) paramsInput.currency = CURRENCIES.EUR
 
   const paramsObj = {
     DS_MERCHANT_AMOUNT: String(paramsInput.amount),
-    DS_MERCHANT_ORDER: paramsInput.orderReference,
+    DS_MERCHANT_ORDER: paramsInput.order,
     DS_MERCHANT_MERCHANTCODE: paramsInput.merchantCode,
     DS_MERCHANT_CURRENCY: paramsInput.currency,
     DS_MERCHANT_TRANSACTIONTYPE: paramsInput.transactionType,

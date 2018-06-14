@@ -27,7 +27,7 @@ secretKey("sq7HjrUOBfKmC576ILgskD5srU870gJ7")
 
 const obj = {
   amount: '100', // cents (in euro)
-  orderReference: '123123',
+  order: '123123',
   merchantName: "REDSYS PAY SHOP",
   merchantCode: '123123123',
   currency: CURRENCIES.EUR,
@@ -195,7 +195,7 @@ const soap = require('soap')
 secretKey("sq7HjrUOBfKmC576ILgskD5srU870gJ7")
 
 const dataparams = {
-  orderReference: 000123,
+  order: 000123,
   amount: '100',
   merchantCode: '123123123',
   identifier: 'REQUIERED',
@@ -226,7 +226,7 @@ soap.createClient(SOAP_URL, (err, client) => {
 
 ### makeParameters AND makeApiParameters accepted parameters:
 * amount
-* orderReference
+* order
 * merchantCode
 * currency
 * transactionType
