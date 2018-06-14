@@ -200,13 +200,13 @@ const dataparams = {
   orderReference: 000123,
   amount: '100',
   merchantCode: '327234688',
-  Identifier: 'b0f74a4sd344Sad23E3dfdebb9d36',
+  identifier: 'b0f74a4sd344Sad23E3dfdebb9d36',
   transactionType: TRANSACTION_TYPES.NO_AUTHENTICATION,
   terminal: '1',
   currency: CURRENCIES.EUR,
-  Ds_ExpiryDate: "2012",
+  expiryDate: "2012",
   merchantURL: `http://shop.js.gl/merchant`,
-  DirectPayment: true
+  directPayment: true
 }
 
 const params = makePaymentParametersWS(dataparams)
@@ -237,14 +237,14 @@ soap.createClient(SOAP_URL, (err, client) => {
 * merchantURL
 * errorURL
 * successURL
-* DateFrecuency
-* ChargeExpiryDate
-* SumTotal
-* DirectPayment
-* Identifier
-* Group
-* Pan
-* ExpiryDate
+* dateFrecuency
+* chargeExpiryDate
+* sumTotal
+* directPayment
+* identifier
+* group
+* pan
+* expiryDate
 * CVV2
 
 ## About
