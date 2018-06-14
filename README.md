@@ -77,8 +77,6 @@ This is a [ejs](http://ejs.co) template view:
 </html>
 ```
 
-For a detailed example, check out `example/`
-
 Need make html same this:
 
 ```html
