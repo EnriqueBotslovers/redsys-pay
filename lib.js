@@ -55,14 +55,14 @@ exports.inputValidate = (paramsInput) => {
   if (paramsInput.merchantURL) paramsObj.DS_MERCHANT_MERCHANTURL = paramsInput.merchantURL
   if (paramsInput.errorURL) paramsObj.DS_MERCHANT_URLKO = paramsInput.errorURL
   if (paramsInput.successURL) paramsObj.DS_MERCHANT_URLOK = paramsInput.successURL
-  if (paramsInput.DateFrecuency) paramsObj.DS_MERCHANT_DATEFRECUENCY = paramsInput.DateFrecuency
-  if (paramsInput.ChargeExpiryDate) paramsObj.DS_MERCHANT_CHARGEEXPIRYDATE = paramsInput.ChargeExpiryDate
-  if (paramsInput.SumTotal) paramsObj.DS_MERCHANT_SUMTOTAL = paramsInput.SumTotal
-  if (paramsInput.DirectPayment) paramsObj.DS_MERCHANT_DIRECTPAYMENT = paramsInput.DirectPayment
-  if (paramsInput.Identifier) paramsObj.DS_MERCHANT_IDENTIFIER = paramsInput.Identifier
-  if (paramsInput.Group) paramsObj.DS_MERCHANT_GROUP = paramsInput.Group
-  if (paramsInput.Pan) paramsObj.DS_MERCHANT_PAN = paramsInput.Pan
-  if (paramsInput.ExpiryDate) paramsObj.DS_MERCHANT_EXPIRYDATE = paramsInput.ExpiryDate
+  if (paramsInput.dateFrecuency) paramsObj.DS_MERCHANT_DATEFRECUENCY = paramsInput.dateFrecuency
+  if (paramsInput.chargeExpiryDate) paramsObj.DS_MERCHANT_CHARGEEXPIRYDATE = paramsInput.chargeExpiryDate
+  if (paramsInput.sumTotal) paramsObj.DS_MERCHANT_SUMTOTAL = paramsInput.sumTotal
+  if (paramsInput.directPayment) paramsObj.DS_MERCHANT_DIRECTPAYMENT = paramsInput.directPayment
+  if (paramsInput.identifier) paramsObj.DS_MERCHANT_IDENTIFIER = paramsInput.identifier
+  if (paramsInput.group) paramsObj.DS_MERCHANT_GROUP = paramsInput.group
+  if (paramsInput.pan) paramsObj.DS_MERCHANT_PAN = paramsInput.pan
+  if (paramsInput.expiryDate) paramsObj.DS_MERCHANT_EXPIRYDATE = paramsInput.expiryDate
   if (paramsInput.CVV2) paramsObj.DS_MERCHANT_CVV2 = paramsInput.CVV2
   return paramsObj
 }
