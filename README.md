@@ -242,6 +242,7 @@ soap.createClient(SOAP_URL, (err, client) => {
 * pan
 * expiryDate
 * CVV2
+* partialPayment
 
 ## About
 

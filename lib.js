@@ -64,6 +64,7 @@ exports.inputValidate = (paramsInput) => {
   if (paramsInput.pan) paramsObj.DS_MERCHANT_PAN = paramsInput.pan
   if (paramsInput.expiryDate) paramsObj.DS_MERCHANT_EXPIRYDATE = paramsInput.expiryDate
   if (paramsInput.CVV2) paramsObj.DS_MERCHANT_CVV2 = paramsInput.CVV2
+  if (paramsInput.partialPayment) paramsObj.DS_MERCHANT_PARTIALPAYMENT = paramsInput.partialPayment
   return paramsObj
 }
 
