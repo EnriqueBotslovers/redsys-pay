@@ -243,6 +243,11 @@ soap.createClient(SOAP_URL, (err, client) => {
 * expiryDate
 * CVV2
 * partialPayment
+* cardCountry
+* merchantData
+* clientIp
+
+
 
 ## About
 

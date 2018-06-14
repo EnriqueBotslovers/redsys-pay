@@ -53,6 +53,7 @@ exports.inputValidate = (paramsInput) => {
   }
   if (paramsInput.merchantName) paramsObj.DS_MERCHANT_MERCHANTNAME = paramsInput.merchantName
   if (paramsInput.merchantURL) paramsObj.DS_MERCHANT_MERCHANTURL = paramsInput.merchantURL
+  if (paramsInput.merchantSignature) paramsObj.DS_MERCHANT_MERCHANTSIGNATURE = paramsInput.merchantSignature
   if (paramsInput.errorURL) paramsObj.DS_MERCHANT_URLKO = paramsInput.errorURL
   if (paramsInput.successURL) paramsObj.DS_MERCHANT_URLOK = paramsInput.successURL
   if (paramsInput.dateFrecuency) paramsObj.DS_MERCHANT_DATEFRECUENCY = paramsInput.dateFrecuency
@@ -64,7 +65,9 @@ exports.inputValidate = (paramsInput) => {
   if (paramsInput.pan) paramsObj.DS_MERCHANT_PAN = paramsInput.pan
   if (paramsInput.expiryDate) paramsObj.DS_MERCHANT_EXPIRYDATE = paramsInput.expiryDate
   if (paramsInput.CVV2) paramsObj.DS_MERCHANT_CVV2 = paramsInput.CVV2
-  if (paramsInput.partialPayment) paramsObj.DS_MERCHANT_PARTIALPAYMENT = paramsInput.partialPayment
+  if (paramsInput.cardCountry) paramsObj.DS_CARD_COUNTRY = paramsInput.cardCountry
+  if (paramsInput.merchantData) paramsObj.DS_MERCHANT_MERCHANTDATA = paramsInput.merchantData
+  if (paramsInput.clientIp) paramsObj.DS_MERCHANT_CLIENTIP = paramsInput.data
   return paramsObj
 }
 
