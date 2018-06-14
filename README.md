@@ -17,14 +17,13 @@ Generate the parameters to create a transaction:
 
 ```js
 const {
-  initialize,
-  makePaymentParameters,
+  secretKey,
+  makeParameters,
   CURRENCIES,
   TRANSACTION_TYPES
 } = require('redsys-pos')
 
-const MERCHANT_KEY = "sq7HjrUOBfKmC576ILgskD5srU870gJ7" // TESTING KEY
-initialize(MERCHANT_KEY)
+secretKey("sq7HjrUOBfKmC576ILgskD5srU870gJ7")
 
 const obj = {
   amount: '100', // cents (in euro)
@@ -39,7 +38,7 @@ const obj = {
   errorURL: 'http://shop.js.gl/error'
 }
 
-const result = makePaymentParameters(obj)
+const result = makeParameters(obj)
 console.log(result);
 ```
 
@@ -185,16 +184,15 @@ npm i soap
 Simple example with identifier:
 ```js
 const {
-  initialize,
+  secretKey,
   CURRENCIES,
   TRANSACTION_TYPES,
-  makePaymentParametersForApi,
+  makeApiParameters,
   SOAP_URL
 } = require('redsys-pay')
 const soap = require('soap')
 
-const MERCHANT_KEY = "sq7HjrUOBfKmC576ILgskD5srU870gJ7" // TESTING KEY
-initialize(MERCHANT_KEY)
+secretKey("sq7HjrUOBfKmC576ILgskD5srU870gJ7")
 
 const dataparams = {
   orderReference: 000123,
@@ -209,7 +207,7 @@ const dataparams = {
   directPayment: true
 }
 
-const params = makePaymentParametersWS(dataparams)
+const params = makeApiParameters(dataparams)
 
 soap.createClient(SOAP_URL, (err, client) => {
   if (err) throw new Error(err)
@@ -226,7 +224,7 @@ soap.createClient(SOAP_URL, (err, client) => {
 ```
 
 
-### makePaymentParameters AND makePaymentParametersWS accepted parameters:
+### makeParameters AND makeApiParameters accepted parameters:
 * amount
 * orderReference
 * merchantCode
