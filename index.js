@@ -19,13 +19,13 @@ exports.APPROVAL_CODES = APPROVAL_CODES
 exports.TRANSACTION_ERROR_CODES = TRANSACTION_ERROR_CODES
 exports.SIS_ERROR_CODES = SIS_ERROR_CODES
 
-exports.initialize = (merchantSecretKey) => {
+exports.secretKey = (merchantSecretKey) => {
   if (!merchantSecretKey) throw new Error("The merchant secret key is mandatory")
   config.MERCHANT_SECRET_KEY = merchantSecretKey
   config.initialized = true
 }
 
-exports.makePaymentParameters = (paramsInput) => {
+exports.makeParameters = (paramsInput) => {
   const paramsObj = inputValidate(paramsInput)
   const payload = JSON.stringify(paramsObj)
   const payloadBuffer = Buffer.from(payload)
@@ -39,7 +39,7 @@ exports.makePaymentParameters = (paramsInput) => {
   }
 }
 
-exports.makePaymentParametersForApi = (paramsInput) => {
+exports.makeApiParameters = (paramsInput) => {
   const paramsObj = inputValidate(paramsInput)
   const payload = JSON.stringify(paramsObj)
   const payloadBuffer = Buffer.from(payload)
