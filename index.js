@@ -41,7 +41,7 @@ exports.makeParameters = (paramsInput) => {
   }
 }
 
-exports.makeApiParameters = (paramsInput) => {
+exports.makeWSParameters = (paramsInput) => {
   const paramsObj = inputValidate(paramsInput)
   const payload = JSON.stringify(paramsObj)
   const payloadBuffer = Buffer.from(payload)
