@@ -185,7 +185,7 @@ const {
   secretKey,
   CURRENCIES,
   TRANSACTION_TYPES,
-  makeApiParameters,
+  makeWSParameters,
   SANDBOX_WS
 } = require('redsys-pay')
 const soap = require('soap')
@@ -205,7 +205,7 @@ const dataparams = {
   CVV2: '123'
 }
 
-const params = makeApiParameters(dataparams)
+const params = makeWSParameters(dataparams)
 
 soap.createClient(SANDBOX_WS, (err, client) => {
   if (err) throw new Error(err)
@@ -222,7 +222,7 @@ soap.createClient(SANDBOX_WS, (err, client) => {
 ```
 
 
-### makeParameters AND makeApiParameters accepted parameters:
+### makeParameters AND makeWSParameters accepted parameters:
 * amount
 * order
 * merchantCode
