@@ -272,7 +272,7 @@ soap.createClient(SANDBOX_WS, (err, client) => {
 * JPY: "392"
 * RUB: "643"
 
-## Obtain services location:
+### Obtain services location:
 ```js
 const {
   SANDBOX_URL,
