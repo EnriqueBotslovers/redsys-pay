@@ -173,7 +173,7 @@ This will print:
 null
 ```
 
-### API SOAP REQUEST
+### API SOAP WebService request
 Install soap client
 ```sh
 npm i soap
@@ -186,7 +186,7 @@ const {
   CURRENCIES,
   TRANSACTION_TYPES,
   makeApiParameters,
-  SOAP_URL
+  SANDBOX_WS
 } = require('redsys-pay')
 const soap = require('soap')
 
@@ -207,7 +207,7 @@ const dataparams = {
 
 const params = makeApiParameters(dataparams)
 
-soap.createClient(SOAP_URL, (err, client) => {
+soap.createClient(SANDBOX_WS, (err, client) => {
   if (err) throw new Error(err)
   else {
     client.trataPeticion(params, (err2, result, rawResponse) => {
@@ -271,6 +271,16 @@ soap.createClient(SOAP_URL, (err, client) => {
 * GBP: "826"
 * JPY: "392"
 * RUB: "643"
+
+## Obtain services location:
+```js
+const {
+  SANDBOX_URL,
+  PRODUCTION_URL,
+  SANDBOX_WS,
+  PRODUCTION_WS
+} = require('redsys-pay')
+```
 
 ## About
 

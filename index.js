@@ -6,12 +6,14 @@ var config = {
   MERCHANT_SECRET_KEY: '', //base64
   SANDBOX_URL: 'https://sis-t.redsys.es:25443/sis/realizarPago',
   PRODUCTION_URL: 'https://sis.redsys.es/sis/realizarPago',
-  SOAP_URL: 'https://sis.redsys.es/sis/services/SerClsWSEntrada/wsdl/SerClsWSEntrada.wsdl'
+  SANDBOX_WS: 'https://sis-t.redsys.es:25443/sis/services/SerClsWSEntrada/wsdl/SerClsWSEntrada.wsdl',
+  PRODUCTION_WS: 'https://sis.redsys.es/sis/services/SerClsWSEntrada/wsdl/SerClsWSEntrada.wsdl'
 }
 
-exports.SOAP_URL = config.SOAP_URL
 exports.SANDBOX_URL = config.SANDBOX_URL
 exports.PRODUCTION_URL = config.PRODUCTION_URL
+exports.SANDBOX_WS = config.SANDBOX_WS
+exports.PRODUCTION_WS = config.PRODUCTION_WS
 exports.sha256Sign = sha256Sign
 exports.CURRENCIES = CURRENCIES
 exports.TRANSACTION_TYPES = TRANSACTION_TYPES
