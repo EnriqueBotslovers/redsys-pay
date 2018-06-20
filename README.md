@@ -7,7 +7,7 @@ NodeJS library to ease the communication with RedSys point of sales
 
 Install the NPM package:
 ```
-npm install redsys-pos
+npm install redsys-pay
 ```
 
 ## Usage
