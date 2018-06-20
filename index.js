@@ -1,4 +1,5 @@
 const Buffer = require('buffer').Buffer
+const xml = require('xml')
 const { CURRENCIES, TRANSACTION_TYPES, APPROVAL_CODES, TRANSACTION_ERROR_CODES, SIS_ERROR_CODES, sha256Sign, decodeResponseParameters, inputValidate } = require('./lib.js')
 
 var config = {
@@ -33,28 +34,28 @@ exports.makeParameters = (paramsInput) => {
   const payloadBuffer = Buffer.from(payload)
   const Ds_MerchantParameters = payloadBuffer.toString('base64')
   const Ds_Signature = sha256Sign(config.MERCHANT_SECRET_KEY, paramsInput.order, Ds_MerchantParameters)
-
-  return {
-    Ds_SignatureVersion: "HMAC_SHA256_V1",
-    Ds_MerchantParameters,
-    Ds_Signature
-  }
+  return { Ds_SignatureVersion: "HMAC_SHA256_V1", Ds_MerchantParameters, Ds_Signature }
 }
 
 exports.makeWSParameters = (paramsInput) => {
   const paramsObj = inputValidate(paramsInput)
-  const payload = JSON.stringify(paramsObj)
-  const payloadBuffer = Buffer.from(payload)
-  const Ds_MerchantParameters = payloadBuffer.toString('base64')
+  const paramsData = Object.keys(paramsObj).map((x) => {
+    const d =  {}
+    d[x] = paramsObj[x]
+    return d
+  })
+  const datosEntrada = { DATOSENTRADA: paramsData }
+  const payload = xml(datosEntrada)
+  const Ds_MerchantParameters = payload.toString('base64')
   const Ds_Signature = sha256Sign(config.MERCHANT_SECRET_KEY, paramsInput.order, Ds_MerchantParameters)
-
-  return {
-    REQUEST: {
-      DATOSENTRADA: paramsObj,
-      DS_SIGNATUREVERSION: "HMAC_SHA256_V1",
-      DS_SIGNATURE: Ds_Signature
-    }
-  } 
+  const data = {
+    REQUEST: [
+      datosEntrada,
+      { DS_SIGNATUREVERSION: "HMAC_SHA256_V1" },
+      { DS_SIGNATURE: Ds_Signature }
+    ]
+  }
+  return  `<trataPeticion><datoEntrada><![CDATA[${xml(data)}]]></datoEntrada></trataPeticion>`
 }
 
 exports.checkResponseParameters = (strPayload, givenSignature) => {
