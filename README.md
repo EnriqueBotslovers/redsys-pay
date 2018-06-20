@@ -179,7 +179,7 @@ Install soap client
 npm i soap
 ```
 
-Simple example with identifier:
+Recurrent payment with SOAP:
 ```js
 const {
   secretKey,
@@ -192,17 +192,15 @@ const soap = require('soap')
 
 secretKey("sq7HjrUOBfKmC576ILgskD5srU870gJ7")
 
-const dataparams = {
-  order: 000123,
-  amount: '100',
-  merchantCode: '123123123',
-  identifier: 'REQUIERED',
+const params = {
+  amount: '100', // cents (in euro)
+  order: '000123',
+  merchantCode: '132132132',
+  currency: CURRENCIES.EUR,
+  expiryDate: "2012",
   transactionType: TRANSACTION_TYPES.NO_AUTHENTICATION,
   terminal: '1',
-  currency: CURRENCIES.EUR,
-  pan: '1234123412341234',
-  expiryDate: "2012",
-  CVV2: '123'
+  identifier: '18550bc2358294ddfdb50f74d149a31eecebb9d36'
 }
 
 const params = makeWSParameters(dataparams)
@@ -210,7 +208,7 @@ const params = makeWSParameters(dataparams)
 soap.createClient(SANDBOX_WS, (err, client) => {
   if (err) throw new Error(err)
   else {
-    client.trataPeticion(params, (err2, result, rawResponse) => {
+    client.trataPeticion({ _xml: params }, (err2, result, rawResponse) => {
       if (err2) throw new Error(err2)
       else {
         console.log(JSON.stringify(rawResponse))
@@ -295,3 +293,4 @@ Josep Subils updates:
 - ES2016 Code Updates
 - Solve Node.js 10.x Buffer deprecations
 - No external dependencies need
+- Correct XML generation for Redsys SOAP compatiblity
