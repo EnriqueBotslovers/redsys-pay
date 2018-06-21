@@ -1,7 +1,7 @@
 {
   "name": "redsys-pay",
-  "version": "1.0.1",
-  "description": "(redsys-pos fork) Node JS library to ease the communication with RedSys point of sales",
+  "version": "1.1.0",
+  "description": "Node JS library to ease the communication with RedSys point of sales",
   "main": "index.js",
   "scripts": {},
   "repository": {
