@@ -88,16 +88,13 @@ Need make html same this:
   </form>
 ```
 
-### Checking a response
+### Get a response parameters
 
 ```js
-// Check a response
-const { checkResponseParameters } = require("redsys-pos")
+const { getResponseParameters } = require("redsys-pos")
 
-const merchantParams = "eyJEc19EYXRlIjoiMjAlMkYxMCUyRjIwMTciLCJEc19Ib3VyIjoiMTclM0EyMyIsIkRzX1NlY3VyZVBheW1lbnQiOiIwIiwiRHNfQW1vdW50IjoiMTAwIiwiRHNfQ3VycmVuY3kiOiI5NzgiLCJEc19PcmRlciI6IjAwMDA5NjU1RDg0IiwiRHNfTWVyY2hhbnRDb2RlIjoiMzI3MjM0Njg4IiwiRHNfVGVybWluYWwiOiIwMDEiLCJEc19SZXNwb25zZSI6Ijk5MTUiLCJEc19UcmFuc2FjdGlvblR5cGUiOiIwIiwiRHNfTWVyY2hhbnREYXRhIjoiIiwiRHNfQXV0aG9yaXNhdGlvbkNvZGUiOiIrKysrKysiLCJEc19Db25zdW1lckxhbmd1YWdlIjoiMSJ9"
-const signature = "vrUsaNbxfonyn4ONUos6oosUaTBY0_SGoKDel6qsHqk="
-
-const result = checkResponseParameters(merchantParams, signature)
+const RESPONSE = req.body.Ds_MerchantParameters
+const result = getResponseParameters(RESPONSE)
 console.log(result)
 ```
 
@@ -121,26 +118,6 @@ If successful, this will print:
   Ds_Card_Country: '724',
   Ds_Card_Brand: '1'
 }
-```
-
-### Checking an invalid response/signature
-If an invalid response or signature is provided:
-
-```js
-// Check a response
-const { checkResponseParameters } = require("redsys-pos")
-
-const merchantParams = "eyJEc19EYXRlIjoiMjAlMkYxMCUyRjIwMTciLCJEc19Ib3VyIjoiMTclM0EyMyIsIkRzX1NlY3VyZVBheW1lbnQiOiIwIiwiRHNfQW1vdW50IjoiMTAwIiwiRHNfQ3VycmVuY3kiOiI5NzgiLCJEc19PcmRlciI6IjAwMDA5NjU1RDg0IiwiRHNfTWVyY2hhbnRDb2RlIjoiMzI3MjM0Njg4IiwiRHNfVGVybWluYWwiOiIwMDEiLCJEc19SZXNwb25zZSI6Ijk5MTUiLCJEc19UcmFuc2FjdGlvblR5cGUiOiIwIiwiRHNfTWVyY2hhbnREYXRhIjoiIiwiRHNfQXV0aG9yaXNhdGlvbkNvZGUiOiIrKysrKysiLCJEc19Db25zdW1lckxhbmd1YWdlIjoiMSJ9"
-const invalidSignature = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa="
-
-result = checkResponseParameters(merchantParams, invalidSignature)
-console.log(result)
-```
-
-This will print:
-
-```js
-null
 ```
 
 ### Checking a response code
