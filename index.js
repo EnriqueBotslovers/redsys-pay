@@ -1,6 +1,6 @@
 const Buffer = require('buffer').Buffer
 const xml = require('xml')
-const { CURRENCIES, TRANSACTION_TYPES, APPROVAL_CODES, TRANSACTION_ERROR_CODES, SIS_ERROR_CODES, sha256Sign, decodeResponseParameters, inputValidate } = require('./lib.js')
+const { CURRENCIES, TRANSACTION_TYPES, APPROVAL_CODES, TRANSACTION_ERROR_CODES, SIS_ERROR_CODES, sha256Sign, inputValidate } = require('./lib.js')
 
 var config = {
   initialized: false,
@@ -60,17 +60,14 @@ exports.makeWSParameters = (paramsInput) => {
   return  `<trataPeticion><datoEntrada><![CDATA[${xml(data)}]]></datoEntrada></trataPeticion>`
 }
 
-exports.checkResponseParameters = (strPayload, givenSignature) => {
-  if (!config.initialized) throw new Error("You must initialize the component first")
-  else if (!strPayload) throw new Error("The payload is required")
-  else if (!givenSignature) throw new Error("The signature is required")
-
-  const payload = decodeResponseParameters(strPayload)
+exports.getResponseParameters = (strPayload) => {
+  if (!strPayload) throw new Error("The payload is required")
+  if (typeof strPayload != "string") throw new Error("Payload must be a base-64 encoded string")
+  const deserial = Buffer.from(strPayload, 'base64')
+  const ascii = deserial.toString('ascii')
+  const payload = JSON.parse(ascii)
   if (!payload || !payload.Ds_Order) return null // invalid response
-  const Ds_Signature = sha256Sign(config.MERCHANT_SECRET_KEY, payload.Ds_Order, strPayload)
-
-  if(Ds_Signature === givenSignature.replace('_', '/')) return payload
-  else return null
+  else return payload
 }
 
 exports.getResponseCodeMessage = (code) => {

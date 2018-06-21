@@ -19,12 +19,6 @@ const encryptOrder = (merchantKey, orderRef) => {
   return res
 }
 
-exports.decodeResponseParameters = (payload) => {
-  if (typeof payload != "string") throw new Error("Payload must be a base-64 encoded string")
-  const result = Buffer.from(payload, "base64").toString()
-  return JSON.parse(result)
-}
-
 exports.sha256Sign = (merchantKey, order, params) => {
   const derivateKey = encryptOrder(merchantKey, order)
   const bufferDerivate = Buffer.from(derivateKey, 'base64')
