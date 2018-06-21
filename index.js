@@ -7,6 +7,8 @@ var config = {
   MERCHANT_SECRET_KEY: '', //base64
   SANDBOX_URL: 'https://sis-t.redsys.es:25443/sis/realizarPago',
   PRODUCTION_URL: 'https://sis.redsys.es/sis/realizarPago',
+  SANDBOX_OPERATIONS: 'https://sis-t.redsys.es:25443/sis/operaciones',
+  PRODUCTION_OPERATIONS: 'https://sis.redsys.es/sis/operaciones',
   SANDBOX_WS: 'https://sis-t.redsys.es:25443/sis/services/SerClsWSEntrada/wsdl/SerClsWSEntrada.wsdl',
   PRODUCTION_WS: 'https://sis.redsys.es/sis/services/SerClsWSEntrada/wsdl/SerClsWSEntrada.wsdl'
 }
