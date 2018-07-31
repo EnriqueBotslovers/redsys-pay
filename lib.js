@@ -32,7 +32,7 @@ exports.sha256Sign = (merchantKey, order, params) => {
 exports.inputValidate = (paramsInput) => {
   if (!paramsInput.amount) throw new Error("The amount to charge is mandatory")
   if (!paramsInput.merchantCode) throw new Error("The merchant code is mandatory")
-  if (!paramsInput.transactionType) throw new Error("The transcation type is mandatory")
+  if (!paramsInput.transactionType) throw new Error("The transaction type is mandatory")
   if (!paramsInput.order) throw new Error("Warning: no order reference provided.")
   if (!paramsInput.terminal) paramsInput.terminal = 1
   if (!paramsInput.currency) paramsInput.currency = CURRENCIES.EUR
