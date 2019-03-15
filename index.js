@@ -72,7 +72,7 @@ exports.getResponseParameters = (strPayload) => {
 
 exports.getResponseCodeMessage = (code) => {
   if (!code || typeof code !== "string") return null
-  code = code.replace(/^0*/, '')
+  code = code.replace(/^0/, '')
   if (Array(100).fill(0).map((val, index) => index.toString().padStart(4, '0')).includes(code)) return "Transacción autorizada para pagos y preautorizaciones"
   if (APPROVAL_CODES[code]) return APPROVAL_CODES[code]
   else if (TRANSACTION_ERROR_CODES[code]) return TRANSACTION_ERROR_CODES[code]
