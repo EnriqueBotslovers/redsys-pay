@@ -62,6 +62,7 @@ exports.inputValidate = (paramsInput) => {
   if (paramsInput.cardCountry) paramsObj.DS_CARD_COUNTRY = paramsInput.cardCountry
   if (paramsInput.merchantData) paramsObj.DS_MERCHANT_MERCHANTDATA = paramsInput.merchantData
   if (paramsInput.clientIp) paramsObj.DS_MERCHANT_CLIENTIP = paramsInput.data
+  if (params.Input) paramsObj.DS_MERCHANT_CONSUMERLANGUAGE = paramsInput.lang
   return paramsObj
 }
 
