@@ -46,6 +46,7 @@ exports.inputValidate = (paramsInput) => {
     DS_MERCHANT_TERMINAL: paramsInput.terminal
   }
   if (paramsInput.merchantName) paramsObj.DS_MERCHANT_MERCHANTNAME = paramsInput.merchantName
+  if (paramsInput.merchantPayMethods) paramsObj.DS_MERCHANT_PAYMETHODS = paramsInput.merchantPayMethods
   if (paramsInput.merchantURL) paramsObj.DS_MERCHANT_MERCHANTURL = paramsInput.merchantURL
   if (paramsInput.merchantSignature) paramsObj.DS_MERCHANT_MERCHANTSIGNATURE = paramsInput.merchantSignature
   if (paramsInput.errorURL) paramsObj.DS_MERCHANT_URLKO = paramsInput.errorURL
