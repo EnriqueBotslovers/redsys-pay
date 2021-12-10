@@ -6,7 +6,7 @@
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/carlosasin/redsys-pay.git"
+    "url": "git+https://github.com/warlock/redsys-pay.git"
   },
   "keywords": [
     "redsys",
@@ -24,7 +24,7 @@
     "webservice",
     "ws"
   ],
-  "author": "Carlos Asín <carlosasinbernal@gmail.com>, <Josep Subils <js@js.gl>, Joel Moreno <joel@tvrbo.pro>, Jordi Moraleda <jordi@tvrbo.pro>",
+  "author": "Carlos Asín <carlosasinbernal@gmail.com>, Josep Subils <js@js.gl>, Joel Moreno <joel@tvrbo.pro>, Jordi Moraleda <jordi@tvrbo.pro>",
   "license": "MIT",
   "dependencies": {
     "xml": "^1.0.1"
