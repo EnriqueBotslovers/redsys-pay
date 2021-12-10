@@ -1,4 +1,4 @@
-RedSys PAY
+Redsys PAY
 ---
 
 NodeJS library to ease the communication with RedSys point of sales
@@ -260,6 +260,7 @@ const {
 ## About
 
 Based [redsys-pos 0.9.0](https://github.com/TvrboPro/redsys-pos) library by Jordi Moraleda and Joel Moreno
+[redsys-pay](https://github.com/warlock/redsys-pay) library by Josep Subils
 
 Josep Subils updates:
 - Node.js "crypto" native implementation
@@ -271,3 +272,12 @@ Josep Subils updates:
 - Solve Node.js 10.x Buffer deprecations
 - No external dependencies need
 - Correct XML generation for Redsys SOAP compatiblity
+
+Carlos Asín @carlosasin updates:
+- Include DS_MERCHANT_CONSUMERLANGUAGE param
+
+@dlopesino update:
+- Add Bizum parameter
+
+@gianbuono update:
+- Fixed regex
