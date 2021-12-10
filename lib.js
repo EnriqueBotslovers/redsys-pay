@@ -62,6 +62,7 @@ exports.inputValidate = (paramsInput) => {
   if (paramsInput.cardCountry) paramsObj.DS_CARD_COUNTRY = paramsInput.cardCountry
   if (paramsInput.merchantData) paramsObj.DS_MERCHANT_MERCHANTDATA = paramsInput.merchantData
   if (paramsInput.clientIp) paramsObj.DS_MERCHANT_CLIENTIP = paramsInput.data
+  if (paramsInput.lang) paramsObj.DS_MERCHANT_CONSUMERLANGUAGE = paramsInput.lang
   return paramsObj
 }
 
@@ -312,4 +313,38 @@ exports.SIS_ERROR_CODES = {
   "SIS0433": "Error Terminal del comercio erróneo",
   "SIS0434": "Error ausencia de número de pedido en la operación enviada por el comercio",
   "SIS0435": "Error en el cálculo de la firma"
+}
+
+exports.CONSUMER_LANGUAGES = { 
+  "100": "български език",
+  "156": "中文",
+  "191": "Hrvatski",
+  "203": "Čeština",
+  "208": "Dansk",
+  "233": "Eesti keel",
+  "246": "Suomi",
+  "300": "ελληνικά",
+  "348": "Magyar",
+  "392": "日本語",
+  "428": "Latviešu valoda",
+  "440": "Lietuvių kalba",
+  "470": "Malti",
+  "642": "Română",
+  "643": "ру́сский язы́к",
+  "703": "Slovenský jazyk",
+  "705": "Slovenski jezik",
+  "792": "Türkçe",
+  "001": "Castellano",
+  "003": "Català",
+  "013": "Euskara",
+  "012": "Galego",
+  "010": "Valencià",
+  "005": "Deutsch",
+  "002": "English",
+  "004": "Français",
+  "006": "Nederlands",
+  "007": "Italiano",
+  "008": "Svenska",
+  "011": "Polski",
+  "009": "Português"
 }

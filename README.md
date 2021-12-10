@@ -259,7 +259,7 @@ const {
 
 ## About
 
-Based [redsys-pos 0.9.0](https://github.com/TvrboPro/redsys-pos) library by Jordi Moraleda and Joel Moreno
+Based [redsys-pos 0.9.0](https://github.com/TvrboPro/redsys-pos) library by Jordi Moraleda and Joel Moreno and [redsys-pay 1.1.0](https://github.com/warlock/redsys-pay) library by Josep Subils
 
 Josep Subils updates:
 - Node.js "crypto" native implementation
@@ -271,3 +271,6 @@ Josep Subils updates:
 - Solve Node.js 10.x Buffer deprecations
 - No external dependencies need
 - Correct XML generation for Redsys SOAP compatiblity
+
+Carlos Asín updates:
+- Include DS_MERCHANT_CONSUMERLANGUAGE param
