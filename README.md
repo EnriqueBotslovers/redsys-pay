@@ -1,4 +1,4 @@
-RedSys PAY
+Redsys PAY
 ---
 
 NodeJS library to ease the communication with RedSys point of sales
