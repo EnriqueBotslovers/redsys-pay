@@ -36,6 +36,9 @@ exports.inputValidate = (paramsInput) => {
   if (!paramsInput.order) throw new Error("Warning: no order reference provided.")
   if (!paramsInput.terminal) paramsInput.terminal = 1
   if (!paramsInput.currency) paramsInput.currency = CURRENCIES.EUR
+  if (!paramsInput.customerMobile) throw new Error("The mobile is mandatory")
+  if (!paramsInput.description) throw new Error("The description is mandatory")
+  if (!paramsInput.smsText) paramsInput.smsText = "Esto es un SMS personalizado del comercio @COMERCIO@. Debe pagar @IMPORTE@ @MONEDA@ en la siguiente url: @URL@"
 
   const paramsObj = {
     DS_MERCHANT_AMOUNT: String(paramsInput.amount),
@@ -43,7 +46,12 @@ exports.inputValidate = (paramsInput) => {
     DS_MERCHANT_MERCHANTCODE: paramsInput.merchantCode,
     DS_MERCHANT_CURRENCY: paramsInput.currency,
     DS_MERCHANT_TRANSACTIONTYPE: paramsInput.transactionType,
-    DS_MERCHANT_TERMINAL: paramsInput.terminal
+    DS_MERCHANT_TERMINAL: paramsInput.terminal,
+	  //DS_MERCHANT_CUSTOMER_MAIL: "Email.prueba@redsys.es ",
+	  DS_MERCHANT_CUSTOMER_MOBILE:  paramsInput.customerMobile,
+    DS_MERCHANT_PRODUCTDESCRIPTION:  paramsInput.description,
+    DS_MERCHANT_CUSTOMER_SMS_TEXT: paramsInput.smsText,
+	  //DS_MERCHANT_MERCHANTURL: "http://comercio.es/notificacion",
   }
   if (paramsInput.merchantName) paramsObj.DS_MERCHANT_MERCHANTNAME = paramsInput.merchantName
   if (paramsInput.merchantPayMethods) paramsObj.DS_MERCHANT_PAYMETHODS = paramsInput.merchantPayMethods
@@ -83,7 +91,8 @@ exports.TRANSACTION_TYPES = {
   DEFERRED_INITIAL_FEE: "R",// Cuota inicial diferido
   DEFERRED_SUCCESSIVE_FEE: "S",// Cuota sucesiva diferido
   NO_AUTHENTICATION: "A",//Operaciones sin autenticacíon
-  DELETE_REFERENCE: "44"
+  DELETE_REFERENCE: "44",
+  PAYGOLD: "F"
 }
 
 // ISO 4217

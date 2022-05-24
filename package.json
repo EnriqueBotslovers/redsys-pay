@@ -1,13 +1,42 @@
 {
-  "name": "redsys-pay",
-  "version": "1.2.0",
-  "description": "Node JS library to ease the communication with RedSys point of sales",
-  "main": "index.js",
-  "scripts": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/warlock/redsys-pay.git"
+  "_from": "redsys-pay",
+  "_id": "redsys-pay@1.2.0",
+  "_inBundle": false,
+  "_integrity": "sha512-cPw6zbMOHElHL45jS0GMXCRDaRpJheXUktC3M07jUmHOZig1DUD/KHYeu/nVTfaUVsq8QapgBEbsuRoMblMxMg==",
+  "_location": "/redsys-pay",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "redsys-pay",
+    "name": "redsys-pay",
+    "escapedName": "redsys-pay",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
   },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/redsys-pay/-/redsys-pay-1.2.0.tgz",
+  "_shasum": "31eb38eb90c501d9095edc13b73691c0e5e24729",
+  "_spec": "redsys-pay",
+  "_where": "C:\\Proyectos\\ADT",
+  "author": {
+    "name": "Carlos Asín",
+    "email": "carlosasinbernal@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/warlock/redsys-pay/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "xml": "^1.0.1"
+  },
+  "deprecated": false,
+  "description": "Node JS library to ease the communication with RedSys point of sales",
+  "homepage": "https://github.com/warlock/redsys-pay#readme",
   "keywords": [
     "redsys",
     "sabadell",
@@ -24,9 +53,13 @@
     "webservice",
     "ws"
   ],
-  "author": "Carlos Asín <carlosasinbernal@gmail.com>, Josep Subils <js@js.gl>, Joel Moreno <joel@tvrbo.pro>, Jordi Moraleda <jordi@tvrbo.pro>",
   "license": "MIT",
-  "dependencies": {
-    "xml": "^1.0.1"
-  }
+  "main": "index.js",
+  "name": "redsys-pay",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/warlock/redsys-pay.git"
+  },
+  "scripts": {},
+  "version": "1.2.0"
 }
